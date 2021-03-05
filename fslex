@@ -1,0 +1,2 @@
+#!/bin/bash
+mono FsLexYacc.10.0.0/build/fslex/net46/fslex.exe $*
