@@ -1,10 +1,10 @@
 // The generated lexer module will start with this code
 {
-module CalculatorLexer
+module GCLLexer
 open FSharp.Text.Lexing
 open System
 // open the module that defines the tokens
-open CalculatorParser
+open GCLParser
 }
 
 // We define macros for some regular expressions we will use later
@@ -28,8 +28,8 @@ rule tokenize = parse
 | "od"          { OD }
 | "->"          { ARROW }
 | "[]"          { IFELSE }
-| num           { NUM(Integer.Parse(LexBuffer<_>.LexemeString lexbuf)) }
-| var           { VAR(LexBuffer<_>.LexemeString lexbuf) }
+| "true"        { TRUE }
+| "false"       { FALSE }
 | '['           { LBRAC }
 | ']'           { RBRAC }
 | '*'           { TIMES }
@@ -40,8 +40,6 @@ rule tokenize = parse
 | '('           { LPAR }
 | ')'           { RPAR }
 | "sqrt"        { SQRT }
-| "true"        { TRUE }
-| "false"       { FALSE }
 | '|'           { OR }
 | "||"          { SCOR }   
 | '&'           { AND }   
@@ -54,3 +52,5 @@ rule tokenize = parse
 | ">="          { GEQ }
 | "<="          { LEQ }
 | eof           { EOF }
+| var           { VAR(LexBuffer<_>.LexemeString lexbuf) }
+| num           { NUM(int (LexBuffer<_>.LexemeString lexbuf)) }

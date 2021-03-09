@@ -1,9 +1,9 @@
 // This file implements a module where we define a data type "expr"
 // to store represent arithmetic expressions
-module CalculatorTypesAST
+module GCLTypesAST
 
-type expr =
-  | Num of float
+type expr = 
+  | Num of int
   | TimesExpr of (expr * expr)
   | DivExpr of (expr * expr)
   | PlusExpr of (expr * expr)
@@ -11,4 +11,31 @@ type expr =
   | PowExpr of (expr * expr)
   | UPlusExpr of (expr)
   | UMinusExpr of (expr)
-  | SqrtExpr  of (expr)
+  | Var of string
+  | Array of (string * expr)
+
+type boolExpr =
+  |OrBool of (boolExpr * boolExpr)
+  |ScorBool of (boolExpr * boolExpr)
+  |AndBool of (boolExpr* boolExpr)
+  |ScandBool of (boolExpr* boolExpr)
+  |NutBool of (boolExpr)
+  |EqualBool of (expr * expr)
+  |NeqBool of (expr * expr)
+  |LtBool of (expr * expr)
+  |GtBool of (expr * expr)
+  |GeqBool of (expr * expr)
+  |LeqBool of (expr * expr)
+  |TrueBool
+  |FalseBool
+
+type com =
+  |AssCom of (string * expr)
+  |AssArrayCom of (string * expr * expr)
+  |SkipCom
+  |SemiCom of (com * com)
+  |IfCom of gc
+  |DoCom of gc
+and gc =
+  |ArrowGc of (boolExpr * com)
+  |IfElseGc of (gc * gc)

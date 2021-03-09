@@ -1,11 +1,12 @@
 // Open the file that defines the type "expr" we shall use as AST
 %{
-open GCDTypesAST
+open GCLTypesAST
 %}
 
 // Declare the tokens (terminal symbols)
-%token <int> NUM <String> VAR
-%token SKIP SEMI IF FI DO OD ARROW LBRAC RBRAC TIMES DIV PLUS MINUS POW LPAR RPAR SQRT TRUE FALSE OR SCOR AND SCAND NUT EQUAL NEQ GT LT GEQ LEQ 
+%token <int> NUM 
+%token <string> VAR
+%token  IFELSE ASS SKIP SEMI IF FI DO OD ARROW LBRAC RBRAC TIMES DIV PLUS MINUS POW LPAR RPAR SQRT TRUE FALSE OR SCOR AND SCAND NUT EQUAL NEQ GT LT GEQ LEQ EOF
 // NOTE: the actual formats of these tokens are defined in the lexer file
 //       as regular expressions
 
@@ -19,24 +20,28 @@ open GCDTypesAST
 %start start
 
 // We specify the return type of each of then non-terminal symbols
-%type <expr> start
-%type <expr> c
-%type <expr> gc 
-%type <expr> a
-%type <expr> b
+%type <com> start
+%type <com> c
+%type <gc> gc 
+%type <gc> gc2 
 
-%type <expr> expression
-%type <expr> expression1
-%type <expr> expression2
-%type <expr> expression3
+%type <boolExpr> b
+%type <boolExpr> b1
+%type <boolExpr> b2
+%type <boolExpr> b3
+
+%type <expr> a
+%type <expr> a1
+%type <expr> a2
+%type <expr> a3
 
 // Grammar productions
 %%
 
 // The first production in "formal" notation is
-// start -> expression
+// start -> C
 // here written:
-start: C EOF             { $1 }
+start: c EOF             { $1 }
 
 // Note that we need to insert an End-Of-File (EOF)
 // The code annotation { $1 } specifies that parsing with this production
@@ -47,17 +52,20 @@ start: C EOF             { $1 }
 // written in the yacc format:
 //C -> x := a | A[a] := a | skip | C ; C | if GC fi | do G
     c:
-  | VAR ASS a                     {AssExpr($1,$3)}
-  | VAR LBRAC a RBRAC ASS a       {AssArrayExpr($1,$3,$6)}
-  | SKIP                          {SkipExpr}
-  | c SEMI c                      {SemiExpr($1,$3)}
-  | IF gc FI                      {IfExpr($2)}
-  | DO gc OD                      {DoExpr($2)}
+  | VAR ASS a                     {AssCom($1,$3)}
+  | VAR LBRAC a RBRAC ASS a       {AssArrayCom($1,$3,$6)}
+  | SKIP                          {SkipCom}
+  | c SEMI c                      {SemiCom($1,$3)}
+  | IF gc FI                      {IfCom($2)}
+  | DO gc OD                      {DoCom($2)}
 
 //GC -> b -> C | GC [] GC
 gc:
-  |b ARROW c                      {ArrowExpr($1,$3)}        
-  |gc IFELSE gc                   {IfElseExpr($1,$3)}
+  |gc2 IFELSE gc                {IfElseGc($1,$3)}
+
+gc2:
+  |b ARROW c                    {ArrowGc($1,$3)}        
+
 
 
 //a0 -> a0 + a1 | a0 - a1 | a1 
@@ -70,22 +78,47 @@ a1:
   | a1 TIMES a2   { TimesExpr($1,$3) }
   | a1 DIV a2     { DivExpr($1,$3) }
   | a2                     { $1 }
-//E2 -> E2^E3
+//A2 -> A2^A3
 a2:
-  | a2 POW a3     { PowExpr($1,$3) }
+  | a3 POW a2     { PowExpr($1,$3) }
   | a3                     { $1 }
-//E3 -> - E3 | + E3 | (E) | Num
+//A3 -> - A3 | + A3 | (E) | Num
 a3:
   | PLUS a3              { UPlusExpr($2) }
   | MINUS a3             { UMinusExpr($2) }
   | NUM                  { Num($1) }
+  | VAR                  { Var($1) }
+  | VAR LBRAC a RBRAC    { Array($1, $3)}
   | LPAR a RPAR          { $2 }
 
+//b -> true | false | b & b | b | b | b && b | b || b | !b| a = a | a != a | a > a | a >= a | a < a | a <= a 
+b:
+  | b OR b1               { OrBool ($1,$3) }
+  | b SCOR b1             { ScorBool ($1,$3) }
+  | b1                    { $1 }
 
+b1:
+  | b1 AND b2               {AndBool ($1,$3)}
+  | b1 SCAND b2             {ScandBool ($1,$3)}
+  | b2                      { $1 }
+
+b2:
+  | NUT b3              {NutBool ($2)}
+  | b3                  { $1 }
+
+b3:
+  | a EQUAL a      {EqualBool ($1, $3)}
+  | a NEQ a        {NeqBool ($1,$3)}
+  | a LT a         {LtBool ($1,$3)}
+  | a GT a         {GtBool ($1,$3)}
+  | a GEQ a        {GeqBool ($1,$3)}
+  | a LEQ a        {LeqBool ($1,$3)}
+  | TRUE           {TrueBool}
+  | FALSE          {FalseBool}
+  | LPAR b RPAR    {$2}
 
 // Again, the code annotation specifies the result of parsing
 // For example { TimesExpr($1,$3) } specifies that parsing with the production
 // returns the value TimesExpr($1,$3), where $i is the result of parsing
 // component i in the production (in this case the lhs and rhs operands)
 
-%%
