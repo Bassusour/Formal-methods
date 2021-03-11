@@ -120,12 +120,13 @@ let rec printCom c l =
     |SkipCom -> printfn "skip"
     |SemiCom(c1, c2) -> printfn ";"
                         printCom(c1) (l+1)
-                        printCom(c2) (l+2)
+                        printCom(c2) (l+1)
     |IfCom(gc) -> printfn "if"
                   printGc gc (l+1)
                   printfn "fi"
     |DoCom(gc) -> printfn "do"
                   printGc gc (l+1)
+                  printSpace l
                   printfn "od"
 and printGc gc l =
     printSpace l
