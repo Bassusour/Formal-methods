@@ -7,6 +7,8 @@ open GCLTypesAST
 open GCLParser
 #load "GCLLexer.fs"
 open GCLLexer
+#load "GraphPrinter.fsx"
+open GraphPrinter
 
 
 let rec pow a b =
@@ -139,6 +141,10 @@ and printGc gc l =
                            printGc gc2 (l+1);
 
 
+
+   
+
+   
 let parse input =
     // translate string into a buffer of characters
     let lexbuf = LexBuffer<char>.FromString input
@@ -152,14 +158,17 @@ let rec compute n =
         printfn "Bye bye"
     else
         printf "Enter Guarded Command code : "
-        //try
+        try
         let e = parse (Console.ReadLine())
-        printCom e 0
+        match e with 
+            | (DFlag, com) -> printfn "DTIME"
+            | (NDFlag, com) -> makeNDGraph com 
+            | (PFlag, com) -> printCom com 0
         printfn "Syntax is correct"
         compute 1
-        //with err -> printfn "Syntax Wrong"
-        //            printfn "%s" err.Message
-        //            compute 1
+        with err -> printfn "Syntax Wrong"
+                    printfn "%s" err.Message
+                    compute 1
 
 // Start interacting with the user
 compute 1

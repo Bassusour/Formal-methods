@@ -6,7 +6,7 @@ open GCLTypesAST
 // Declare the tokens (terminal symbols)
 %token <int> NUM 
 %token <string> VAR
-%token  IFELSE ASS SKIP SEMI IF FI DO OD ARROW LBRAC RBRAC TIMES DIV PLUS MINUS POW LPAR RPAR SQRT TRUE FALSE OR SCOR AND SCAND NUT EQUAL NEQ GT LT GEQ LEQ EOF
+%token  IFELSE ASS SKIP SEMI IF FI DO OD ARROW LBRAC RBRAC TIMES DIV PLUS MINUS POW LPAR RPAR SQRT TRUE FALSE OR SCOR AND SCAND NUT EQUAL NEQ GT LT GEQ LEQ EOF DFLAG NDFLAG PFLAG
 // NOTE: the actual formats of these tokens are defined in the lexer file
 //       as regular expressions
 
@@ -20,10 +20,11 @@ open GCLTypesAST
 %start start
 
 // We specify the return type of each of then non-terminal symbols
-%type <com> start
+%type <flag*com> start
 %type <com> c
 %type <gc> gc 
 %type <gc> gc2 
+%type <flag> f
 
 %type <boolExpr> b
 %type <boolExpr> b1
@@ -41,7 +42,9 @@ open GCLTypesAST
 // The first production in "formal" notation is
 // start -> C
 // here written:
-start: c EOF             { $1 }
+start: 
+     | f c EOF             { ($1,$2) }
+     | c EOF              { (PFlag ,$1) }
 
 // Note that we need to insert an End-Of-File (EOF)
 // The code annotation { $1 } specifies that parsing with this production
@@ -58,6 +61,12 @@ start: c EOF             { $1 }
   | c SEMI c                      {SemiCom($1,$3)}
   | IF gc FI                      {IfCom($2)}
   | DO gc OD                      {DoCom($2)}
+
+
+f:
+  | DFLAG                         {DFlag}
+  | NDFLAG                        {NDFlag}
+  | PFLAG                         {PFlag}
 
 //GC -> b -> C | GC [] GC
 gc:

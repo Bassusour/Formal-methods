@@ -39,3 +39,14 @@ type com =
 and gc =
   |ArrowGc of (boolExpr * com)
   |IfElseGc of (gc * gc)
+
+
+type flag = 
+  |DFlag  
+  |NDFlag  
+  |PFlag  
+
+type state =
+  |Qs
+  |Qf
+  |Q of (int)

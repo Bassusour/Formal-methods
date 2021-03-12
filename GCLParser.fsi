@@ -34,6 +34,9 @@ type token =
   | GEQ
   | LEQ
   | EOF
+  | DFLAG
+  | NDFLAG
+  | PFLAG
   | VAR of (string)
   | NUM of (int)
 type tokenId = 
@@ -70,6 +73,9 @@ type tokenId =
     | TOKEN_GEQ
     | TOKEN_LEQ
     | TOKEN_EOF
+    | TOKEN_DFLAG
+    | TOKEN_NDFLAG
+    | TOKEN_PFLAG
     | TOKEN_VAR
     | TOKEN_NUM
     | TOKEN_end_of_input
@@ -78,6 +84,7 @@ type nonTerminalId =
     | NONTERM__startstart
     | NONTERM_start
     | NONTERM_c
+    | NONTERM_f
     | NONTERM_gc
     | NONTERM_gc2
     | NONTERM_a
@@ -99,4 +106,4 @@ val prodIdxToNonTerminal: int -> nonTerminalId
 
 /// This function gets the name of a token as a string
 val token_to_string: token -> string
-val start : (FSharp.Text.Lexing.LexBuffer<'cty> -> token) -> FSharp.Text.Lexing.LexBuffer<'cty> -> (com) 
+val start : (FSharp.Text.Lexing.LexBuffer<'cty> -> token) -> FSharp.Text.Lexing.LexBuffer<'cty> -> (flag*com) 
