@@ -1,7 +1,7 @@
-Run GCL.fsx with fsharpi to run the program
-Then enter a flag and a guarded command 
-Example: -ND if a < 4 -> a:=a+1 fi
-The flags are: 
--ND -> non deterministic graph
--D -> deterministic graph
--P -> print syntax tree
+Run GCL.fsx with fsharpi to run the program \n
+Then enter a flag and a guarded command \n
+Example: -ND if a < 4 -> a:=a+1 fi\n
+The flags are: \n
+-ND -> non deterministic graph\n
+-D -> deterministic graph\n
+-P -> print syntax tree\n
