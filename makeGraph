@@ -1,3 +1,9 @@
 #!/bin/sh
-xclip -selection clipboard -o |dot -Tpdf | zathura -
-
+graph="digraph program_graph {rankdir=LR;
+node [shape = circle]; qs;
+node [shape = doublecircle]; qf;
+node [shape = circle]
+" 
+arrows=$(tac out | awk '/q.* -> q-*/{print $0}/digraph/{ exit }' | tac)}
+echo "$graph$arrows" | dot -Tpdf | zathura -
+#xclip -selection clipboard -o |dot -Tpdf | zathura -

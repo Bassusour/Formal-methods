@@ -157,14 +157,13 @@ let rec compute n =
     if n = 0 then
         printfn "Bye bye"
     else
-        printf "Enter Guarded Command code : "
+        printfn "Enter (-ND | -D | -P) Guarded Command code : "
         try
         let e = parse (Console.ReadLine())
         match e with 
-            | (DFlag, com) -> printfn "DTIME"
-            | (NDFlag, com) -> makeNDGraph com 
             | (PFlag, com) -> printCom com 0
-        printfn "Syntax is correct"
+                              printfn "Syntax is correct"
+            | (det, com) -> makeNDGraph com det
         compute 1
         with err -> printfn "Syntax Wrong"
                     printfn "%s" err.Message
