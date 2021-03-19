@@ -67,6 +67,7 @@ f:
   | DFLAG                         {DFlag}
   | NDFLAG                        {NDFlag}
   | PFLAG                         {PFlag}
+  | STEPFLAG                      {StepFlag}
 
 //GC -> b -> C | GC [] GC
 gc:
