@@ -32,23 +32,19 @@ let rec setInitVars com mapVars mapArrays =
     match com with
     | AssCom(s,e) -> setInitVars e (insertInt s mapVars) mapArrays
 and insertInt name (mapVars:Map<String, int>) = 
-    match mapVars.tryFind with
+    match mapVars.TryFind name with
     | Some(n) -> mapVars
     | None    -> printf "Enter initial value for %s" name
-                 let input =  Console.Read
+                 let input = int (Console.ReadLine())
                  mapVars.Add(name, input)
-and insertArray name (mapArrays:Map<String, List<int>>) = 
-    match mapArrays.tryFind with
+and insertArray name (mapArrays:Map<String, int[]>) = 
+    match mapArrays.TryFind name with
     | Some(n) -> mapArrays
     | None    -> printf "Enter initial value for %s" name
-                 let input =  Console.Read
-                 mapArrays.Add(name, input)
+                 mapArrays.Add (name, (Array.map int (Console.ReadLine().Replace(" ", "").Split [|','|])))
 
-let rec readArrayInput map = function
-    | "\n" -> 
-
-let rec insertArray name mapArrays = 
-    match 
+let rec insertArray name (mapArrays:Map<string,int[]>) = 
+    match map
 
 let rec setInitVarExpr expr map = 
     match expr with
@@ -77,12 +73,6 @@ let rec setInitVarExpr expr map =
 
 let rec StepwiseCum q1 q2 = function
     |AssCom(s,e) -> 
-
-let rec printSpace = function
-    |0 -> printf "|"
-    |x -> printf "  " 
-          printSpace (x-1);; 
-
 
 
 

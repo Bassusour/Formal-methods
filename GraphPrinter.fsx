@@ -1,6 +1,12 @@
 //open System
 //#load "GCLTypesAST.fs"
 //open GCLTypesAST
+let rec printSpace = function
+    |0 -> printf "|"
+    |x -> printf "  " 
+          printSpace (x-1);; 
+
+
 
 let stateToString = function
     |Qs -> "qs"
