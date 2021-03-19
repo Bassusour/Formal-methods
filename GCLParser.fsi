@@ -37,6 +37,7 @@ type token =
   | DFLAG
   | NDFLAG
   | PFLAG
+  | STEPFLAG
   | VAR of (string)
   | NUM of (int)
 type tokenId = 
@@ -76,6 +77,7 @@ type tokenId =
     | TOKEN_DFLAG
     | TOKEN_NDFLAG
     | TOKEN_PFLAG
+    | TOKEN_STEPFLAG
     | TOKEN_VAR
     | TOKEN_NUM
     | TOKEN_end_of_input
