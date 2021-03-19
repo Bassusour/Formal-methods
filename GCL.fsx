@@ -28,48 +28,62 @@ let rec eval e =
     | UPlusExpr(x) -> eval(x) 
     | UMinusExpr(x) -> - eval(x);
 
-let rec setInitVars com mapVars mapArrays = 
-    match com with
-    | AssCom(s,e) -> setInitVars e (insertInt s mapVars) mapArrays
-and insertInt name (mapVars:Map<String, int>) = 
-    match mapVars.TryFind name with
-    | Some(n) -> mapVars
+
+
+let insertInt name (mapInts:Map<String, int>) = 
+    match mapInts.TryFind name with
+    | Some(n) -> mapInts
     | None    -> printf "Enter initial value for %s" name
                  let input = int (Console.ReadLine())
-                 mapVars.Add(name, input)
-and insertArray name (mapArrays:Map<String, int[]>) = 
+                 mapInts.Add(name, input)
+let insertArray name (mapArrays:Map<String, int[]>) = 
     match mapArrays.TryFind name with
     | Some(n) -> mapArrays
     | None    -> printf "Enter initial value for %s" name
                  mapArrays.Add (name, (Array.map int (Console.ReadLine().Replace(" ", "").Split [|','|])))
 
-let rec insertArray name (mapArrays:Map<string,int[]>) = 
-    match map
 
-let rec setInitVarExpr expr map = 
+let rec setInitBool bool (mapInts, mapArrays) = 
+    match bool with
+    | TrueBool -> (mapInts, mapArrays)
+    | FalseBool -> (mapInts, mapArrays)
+    | OrBool(b1,b2) 
+    | ScorBool(b1,b2)
+    | AndBool(b1,b2)
+    | ScandBool(b1,b2) -> setInitBool b1 (mapInts, mapArrays) |> setInitBool b2
+    | NutBool(b1) -> setInitBool b1 (mapInts, mapArrays)
+    | EqualBool(e1,e2) 
+    | NeqBool(e1,e2) 
+    | LtBool(e1,e2) 
+    | GtBool(e1,e2) 
+    | GeqBool(e1,e2) 
+    | LeqBool(e1,e2) -> setInitVarExpr e1 (mapInts, mapArrays) |> setInitVarExpr e2
+and setInitVarExpr expr (mapInts, mapArrays) = 
     match expr with
-    | Num(x) -> map
-    | Var(x) -> insert x map
-    | Array(s,e) -> 
-    | TimesExpr(x,y) -> printfn "*"
-                        printExpr(x) (l+1) 
-                        printExpr(y) (l+1) 
-    | DivExpr(x,y) ->  printfn "/"
-                       printExpr(x) (l+1) 
-                       printExpr(y) (l+1) 
-    | PlusExpr(x,y) -> printfn "+"
-                       printExpr(x) (l+1) 
-                       printExpr(y) (l+1) 
-    | MinusExpr(x,y) -> printfn "-"
-                        printExpr (x) (l+1) 
-                        printExpr (y) (l+1) 
-    | PowExpr(x,y) -> printfn "^"
-                      printExpr(x) (l+1) 
-                      printExpr(y) (l+1) 
-    | UPlusExpr(x) -> printfn "+"
-                      printExpr(x) (l+1) 
-    | UMinusExpr(x) -> printfn "."
-                       printExpr(x) (l+1)
+    | Num(x) -> (mapInts, mapArrays)
+    | Var(x) -> (insertInt x mapInts, mapArrays)
+    | Array(s,e) -> setInitVarExpr e (mapInts, (insertArray s mapArrays))
+    | TimesExpr(x,y) 
+    | DivExpr(x,y) 
+    | PlusExpr(x,y) 
+    | MinusExpr(x,y) 
+    | PowExpr(x,y) -> let e1 = setInitVarExpr x (mapInts, mapArrays)
+                      setInitVarExpr y e1
+    | UPlusExpr(x)  
+    | UMinusExpr(x) -> setInitVarExpr x (mapInts, mapArrays)
+
+let rec setInitVars com (mapInts, mapArrays) = 
+    match com with
+    | AssCom(s,e) -> setInitVarExpr e ((insertInt s mapInts), mapArrays)
+    | AssArrayCom(s,e1,e2) -> (mapInts, insertArray s mapArrays) |> (setInitVarExpr e1) |> (setInitVarExpr e2)
+    | SkipCom -> (mapInts, mapArrays)
+    | SemiCom(c1,c2) -> setInitVars c1 (mapInts, mapArrays) |> setInitVars c2 
+    | IfCom(gc) 
+    | DoCom(gc) -> setInitGC gc (mapInts, mapArrays)
+and setInitGC gc (mapInts, mapArrays) = 
+    match gc with
+    | ArrowGc(b,c) -> setInitBool b (mapInts, mapArrays) |> setInitVars c
+    | IfElseGc(gc1, gc2) -> setInitGC gc1 (mapInts, mapArrays) |> setInitGC gc2
 
 let rec StepwiseCum q1 q2 = function
     |AssCom(s,e) -> 
