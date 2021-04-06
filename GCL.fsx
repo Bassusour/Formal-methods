@@ -17,16 +17,35 @@ let rec pow a b =
     |0 -> 1
     |_ -> a * pow a (b-1);;
 
-let rec eval e =
+let rec eval e (mapInts:Map<String, int>, mapArrays:Map<String, int []>) =
   match e with
     | Num(x) -> x
-    | TimesExpr(x,y) -> eval(x) * eval (y)
-    | DivExpr(x,y) -> eval(x) / eval (y)
-    | PlusExpr(x,y) -> eval(x) + eval (y)
-    | MinusExpr(x,y) -> eval(x) - eval (y)
-    | PowExpr(x,y) -> pow (eval(x)) (eval(y))
-    | UPlusExpr(x) -> eval(x) 
-    | UMinusExpr(x) -> - eval(x);
+    | TimesExpr(x,y) -> eval x (mapInts, mapArrays) * eval y (mapInts, mapArrays)
+    | DivExpr(x,y) -> eval x (mapInts, mapArrays) / eval y (mapInts, mapArrays)
+    | PlusExpr(x,y) -> eval x (mapInts, mapArrays) + eval y (mapInts, mapArrays)
+    | MinusExpr(x,y) -> eval x (mapInts, mapArrays) - eval y (mapInts, mapArrays)
+    | PowExpr(x,y) -> pow (eval x (mapInts, mapArrays)) (eval y (mapInts, mapArrays))
+    | UPlusExpr(x) -> eval x (mapInts, mapArrays) 
+    | UMinusExpr(x) -> - eval x (mapInts, mapArrays);
+    | Var(name) -> match mapInts.TryFind name with
+                   | Some(x) -> x
+                   | None    -> failwith "Variable not found"
+    | Array(name, e) -> match mapArrays.TryFind name with
+                        | Some(a) -> a.[eval e (mapInts, mapArrays)]
+                        | None    -> failwith "Array not found"
+
+let rec evalBool b (mapInts:Map<String, int>, mapArrays:Map<String, int []>) = 
+    match b with
+    | TrueBool -> true 
+    | FalseBool -> false 
+    | EqualBool(e1,e2) -> eval e1 (mapInts, mapArrays) = eval e2 (mapInts, mapArrays)
+    | GtBool(e1, e2)   -> eval e1 (mapInts, mapArrays) > eval e2 (mapInts, mapArrays)
+    | GeqBool(e1, e2)  -> eval e1 (mapInts, mapArrays) >= eval e2 (mapInts, mapArrays)
+    | ScandBool(b1,b2) | AndBool(b1, b2)  -> evalBool b1 (mapInts, mapArrays) && evalBool b2 (mapInts, mapArrays)
+    | OrBool(b1, b2) | ScorBool(b1,b2) -> evalBool b1 (mapInts, mapArrays) || evalBool b2 (mapInts, mapArrays)
+    | NutBool(b1) -> not(evalBool b1 (mapInts, mapArrays))
+
+
 
 let insertInt name (mapInts:Map<String, int>) = 
     match mapInts.TryFind name with
@@ -82,12 +101,18 @@ and setInitGC gc (mapInts, mapArrays) =
     | ArrowGc(b,c) -> setInitBool b (mapInts, mapArrays) |> setInitVars c
     | IfElseGc(gc1, gc2) -> setInitGC gc1 (mapInts, mapArrays) |> setInitGC gc2
 
-let rec StepwiseCum q1 q2 (mapInts:Map<String, int>, mapArrays:Map<String, int []>) = function
-    | AssCom(s,e) -> (mapInts.Add(s,eval(e)), mapArrays)
+let rec evalCum q1 q2 (mapInts:Map<String, int>, mapArrays:Map<String, int []>, n) = function
+    | AssCom(s,e) -> (mapInts.Add(s,eval e (mapInts, mapArrays)), mapArrays, n)
     | AssArrayCom(name,e1,e2) -> let arr = Map.find name mapArrays
-                                 Array.set (arr) (eval(e1)) (eval(e2))
-                                 (mapInts,mapArrays.Add(name, arr))
-
+                                 Array.set (arr) (eval e1 (mapInts, mapArrays)) (eval e2 (mapInts, mapArrays))
+                                 (mapInts,mapArrays.Add(name, arr), n)
+    | SkipCom -> (mapInts, mapArrays, n)
+    | SemiCom(c1, c2) -> let maps = evalCum q1 nextState(q1 n) (mapInts, mapArrays, n+1) c1
+                         evalCum nextState(q1 n) q2 maps c2
+    | IfCom(gc) -> 
+and evalGC gc q1 (mapInts:Map<String, int>, mapArrays:Map<String, int []>) = 
+    match gc with
+    | ArrowGc(b,c) when evalBool b (mapInts, mapArrays) -> evalCum 
    
 let parse input =
     // translate string into a buffer of characters
@@ -107,7 +132,7 @@ let rec compute n =
         match e with 
             | (StepFlag, com) -> let (m1,m2) = setInitVars com (Map.empty, Map.empty)
                                  printfn "Map for ints %A \nMap for arrays %A" m1 m2
-                                 StepwiseCum Qs Qf (m1,m2) com
+                                 evalCum Qs Qf (m1,m2) com
                                  printfn "Map for ints %A \nMap for arrays %A" m1 m2
             | (PFlag, com) -> printCom com 0
                               printfn "Syntax is correct"

@@ -9,6 +9,15 @@ let rec makeList (s:string) =
 
 makeList "5,0, 2 , 1"
 
+let maptest = Map.empty.Add("Zara Ali", [|1;2;3|]);;
+
+let mapArrays:Map<String, int []> = 
+
+match maptest.TryFind "Zara Ali" with
+   | Some(a) -> a.[2]
+
+
+
 let mapArrays =
    Map.empty. (* Creating an empty Map *)
       Add("Zara Ali", [|1;2;3|]);;

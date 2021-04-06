@@ -51,6 +51,7 @@ let rec bToString b  =
       |LeqBool(e1, e2) -> "(" + eToString e1 + "<=" + eToString e2 + ")"
       |TrueBool -> "true"
       |FalseBool -> "false"
+      
 let rec arrowC c q1 q2 n det =
     match c with
         |AssCom(s,e) -> printLabel (s + ":=" + (eToString e)) q1 q2
