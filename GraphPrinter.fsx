@@ -61,8 +61,9 @@ let rec arrowC c q1 q2 n det =
         |SkipCom -> printLabel "skip" q1 q2
                     n
         |SemiCom(c1, c2) -> match q1 with
-                            |Qs -> arrowC c2 (Q(1)) q2 (arrowC c1 Qs (Q(1)) (n+1) det) det
-                            |Q(x) -> arrowC c2 (Q(x+1)) q2 (arrowC c1 (Q(x)) (Q(x+1)) (n+1) det) det
+                            |Qs -> arrowC c2 (Q(1)) q2 (arrowC c1 Qs (Q(n+1)) (n+1) det) det
+                            |Q(x) -> let n1 = (arrowC c1 (Q(x)) (Q(n+1)) (n+1) det)
+                                     arrowC c2 (Q(n+1)) q2 n1 det
                             |_ -> failwith "Wrong flag"
         |IfCom(gc) -> arrowGC gc q1 q2 n FalseBool det 
         |DoCom(gc) -> match det with

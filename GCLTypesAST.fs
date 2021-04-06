@@ -14,6 +14,7 @@ type expr =
   | Var of string
   | Array of (string * expr)
 
+
 type boolExpr =
   |OrBool of (boolExpr * boolExpr)
   |ScorBool of (boolExpr * boolExpr)
