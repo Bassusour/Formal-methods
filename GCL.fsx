@@ -107,13 +107,16 @@ let rec evalCum q1 q2 (mapInts:Map<String, int>, mapArrays:Map<String, int []>, 
                                  Array.set (arr) (eval e1 (mapInts, mapArrays)) (eval e2 (mapInts, mapArrays))
                                  (mapInts,mapArrays.Add(name, arr), n)
     | SkipCom -> (mapInts, mapArrays, n)
-    | SemiCom(c1, c2) -> let maps = evalCum q1 nextState(q1 n) (mapInts, mapArrays, n+1) c1
-                         evalCum nextState(q1 n) q2 maps c2
-    | IfCom(gc) -> 
-and evalGC gc q1 (mapInts:Map<String, int>, mapArrays:Map<String, int []>) = 
+    | SemiCom(c1, c2) -> let maps = evalCum q1 (Q(n+1)) (mapInts, mapArrays, (n+1)) c1
+                         evalCum (Q(n+1)) q2 maps c2
+    | IfCom(gc) -> evalGC gc q1 q2 (mapInts, mapArrays, n) 
+and evalGC gc q1 q2 (mapInts:Map<String, int>, mapArrays:Map<String, int []>, n) = 
     match gc with
-    | ArrowGc(b,c) when evalBool b (mapInts, mapArrays) -> evalCum 
-   
+    | ArrowGc(b,c) when evalBool b (mapInts, mapArrays) -> evalCum (Q(n+1)) q2 (mapInts, mapArrays, (n+1)) c
+    | ArrowGc(b,c) -> (mapInts, mapArrays, n)
+    | IfElseGc(ArrowGc(b,c), gc2) when evalBool b (mapInts, mapArrays) -> evalGC (ArrowGc(b,c)) q1 q2 (mapInts, mapArrays, n)
+    | IfElseGc(gc1, gc2) -> evalGC gc2 q1 q2 (mapInts, mapArrays, n)
+
 let parse input =
     // translate string into a buffer of characters
     let lexbuf = LexBuffer<char>.FromString input
@@ -132,7 +135,7 @@ let rec compute n =
         match e with 
             | (StepFlag, com) -> let (m1,m2) = setInitVars com (Map.empty, Map.empty)
                                  printfn "Map for ints %A \nMap for arrays %A" m1 m2
-                                 evalCum Qs Qf (m1,m2) com
+                                 evalCum Qs Qf (m1,m2,0) com 
                                  printfn "Map for ints %A \nMap for arrays %A" m1 m2
             | (PFlag, com) -> printCom com 0
                               printfn "Syntax is correct"
