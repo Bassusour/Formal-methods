@@ -52,3 +52,5 @@ type state =
   |Qs
   |Qf
   |Q of (int)
+
+ exception StuckException of (state* Map<string, int>* Map<string, int[]>)
