@@ -28,18 +28,16 @@ let rec eval e =
     | UPlusExpr(x) -> eval(x) 
     | UMinusExpr(x) -> - eval(x);
 
-
-
 let insertInt name (mapInts:Map<String, int>) = 
     match mapInts.TryFind name with
     | Some(n) -> mapInts
-    | None    -> printf "Enter initial value for %s" name
+    | None    -> printfn "Enter initial value for %s" name
                  let input = int (Console.ReadLine())
                  mapInts.Add(name, input)
 let insertArray name (mapArrays:Map<String, int[]>) = 
     match mapArrays.TryFind name with
     | Some(n) -> mapArrays
-    | None    -> printf "Enter initial value for %s" name
+    | None    -> printfn "Enter initial value for %s: " name
                  mapArrays.Add (name, (Array.map int (Console.ReadLine().Replace(" ", "").Split [|','|])))
 
 
@@ -71,8 +69,7 @@ and setInitVarExpr expr (mapInts, mapArrays) =
                       setInitVarExpr y e1
     | UPlusExpr(x)  
     | UMinusExpr(x) -> setInitVarExpr x (mapInts, mapArrays)
-
-let rec setInitVars com (mapInts, mapArrays) = 
+and setInitVars com (mapInts, mapArrays) = 
     match com with
     | AssCom(s,e) -> setInitVarExpr e ((insertInt s mapInts), mapArrays)
     | AssArrayCom(s,e1,e2) -> (mapInts, insertArray s mapArrays) |> (setInitVarExpr e1) |> (setInitVarExpr e2)
@@ -85,13 +82,12 @@ and setInitGC gc (mapInts, mapArrays) =
     | ArrowGc(b,c) -> setInitBool b (mapInts, mapArrays) |> setInitVars c
     | IfElseGc(gc1, gc2) -> setInitGC gc1 (mapInts, mapArrays) |> setInitGC gc2
 
-//let rec StepwiseCum q1 q2 = function
-  //  |AssCom(s,e) -> 
 
-
-
-
-   
+let rec StepwiseCum q1 q2 (mapInts:Map<String, int>, mapArrays:Map<String, int []>) = function
+    | AssCom(s,e) -> (mapInts.Add(s,eval(e)), mapArrays)
+    | AssArrayCom(name,e1,e2) -> let arr = Map.find name mapArrays
+                                 Array.set (arr) (eval(e1)) (eval(e2))
+                                 (mapInts,mapArrays.Add(name, arr))
 
    
 let parse input =
@@ -106,18 +102,22 @@ let rec compute n =
     if n = 0 then
         printfn "Bye bye"
     else
-        printfn "Enter (-ND | -D | -P) Guarded Command code : "
-        try
+        printfn "Enter (-SW | -ND | -D | -P) Guarded Command code : "
+        //try
         let e = parse (Console.ReadLine())
         match e with 
-            | (StepFlag, com) -> setInitVars com (Map.empty, Map.empty) |> ignore
+
+            | (StepFlag, com) -> let (m1,m2) = setInitVars com (Map.empty, Map.empty)
+                                 printfn "Map for ints %A \nMap for arrays %A" m1 m2
+                                 StepwiseCum Qs Qf (m1,m2) com
+                                 printfn "Map for ints %A \nMap for arrays %A" m1 m2
             | (PFlag, com) -> printCom com 0
                               printfn "Syntax is correct"
             | (det, com) -> makeNDGraph com det
         compute 1
-        with err -> printfn "Syntax Wrong"
-                    printfn "%s" err.Message
-                    compute 1
+        //with err -> printfn "Syntax Wrong"
+        //            printfn "%s" err.Message
+        //            compute 1
 
 // Start interacting with the user
 compute 1
