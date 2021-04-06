@@ -5,7 +5,7 @@ The flags are:
 -ND -> non deterministic graph  
 -D -> deterministic graph  
 -P -> print syntax tree  
--SW -> Stepwise execution, it asks you then to enter the start values,
+-SW -> Stepwise execution, it asks you to enter the start values,
     for variable its just a number, for array seperate your numbers  with a ","  
     ex.  
     Enter initial value for x  
