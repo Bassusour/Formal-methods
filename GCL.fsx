@@ -17,10 +17,10 @@ let rec pow a b =
     |0 -> 1
     |_ -> a * pow a (b-1);;
 
-let rec eval e =
-  match e with
+let rec eval e  =
+   match e with
     | Num(x) -> x
-    | TimesExpr(x,y) -> eval(x) * eval (y)
+    | TimesExpr(x,y) -> eval(x)  * eval (y)
     | DivExpr(x,y) -> eval(x) / eval (y)
     | PlusExpr(x,y) -> eval(x) + eval (y)
     | MinusExpr(x,y) -> eval(x) - eval (y)
@@ -39,6 +39,7 @@ let insertArray name (mapArrays:Map<String, int[]>) =
     | Some(n) -> mapArrays
     | None    -> printfn "Enter initial value for %s: " name
                  mapArrays.Add (name, (Array.map int (Console.ReadLine().Replace(" ", "").Split [|','|])))
+                 
 
 
 let rec setInitBool bool (mapInts, mapArrays) = 
