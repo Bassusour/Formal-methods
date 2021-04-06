@@ -85,8 +85,8 @@ and setInitGC gc (mapInts, mapArrays) =
     | ArrowGc(b,c) -> setInitBool b (mapInts, mapArrays) |> setInitVars c
     | IfElseGc(gc1, gc2) -> setInitGC gc1 (mapInts, mapArrays) |> setInitGC gc2
 
-let rec StepwiseCum q1 q2 = function
-    |AssCom(s,e) -> 
+//let rec StepwiseCum q1 q2 = function
+  //  |AssCom(s,e) -> 
 
 
 
@@ -110,7 +110,7 @@ let rec compute n =
         try
         let e = parse (Console.ReadLine())
         match e with 
-            | (StepFlag, com) -> StepwiseCum Qs Qf com
+            | (StepFlag, com) -> setInitVars com (Map.empty, Map.empty) |> ignore
             | (PFlag, com) -> printCom com 0
                               printfn "Syntax is correct"
             | (det, com) -> makeNDGraph com det
@@ -121,3 +121,4 @@ let rec compute n =
 
 // Start interacting with the user
 compute 1
+
