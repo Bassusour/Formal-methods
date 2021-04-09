@@ -11,6 +11,8 @@ open GCLLexer
 open GraphPrinter
 #load "printAST.fsx"
 open PrintAST
+#load "GCLAnalysis.fsx"
+open GCLAnalysis
 
 let rec pow a b =
     match b with
@@ -143,7 +145,7 @@ let rec compute n =
     if n = 0 then
         printfn "Bye bye"
     else
-        printfn "Enter (-SW | -ND | -D | -P) Guarded Command code : "
+        printfn "Enter ( -SA | -SW | -ND | -D | -P) Guarded Command code : "
         try
         let e = parse (Console.ReadLine())
         match e with 
@@ -162,6 +164,7 @@ let rec compute n =
 
             | (PFlag, com) -> printCom com 0
                               printfn "Syntax is correct"
+            | (SAFlag, com) -> signAnalysis com
             | (det, com) -> makeNDGraph com det
         compute 1
         with err -> printfn "Syntax Wrong"

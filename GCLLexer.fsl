@@ -55,6 +55,7 @@ rule tokenize = parse
 | "-ND"         { NDFLAG }
 | "-P"          { PFLAG }
 | "-SW"         { STEPFLAG }
+| "-SA"         { SAFLAG }
 | eof           { EOF }
 | var           { VAR(LexBuffer<_>.LexemeString lexbuf) }
 | num           { NUM(int (LexBuffer<_>.LexemeString lexbuf)) }

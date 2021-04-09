@@ -47,6 +47,7 @@ type flag =
   |NDFlag  
   |PFlag  
   |StepFlag
+  |SAFlag
 
 type state =
   |Qs
