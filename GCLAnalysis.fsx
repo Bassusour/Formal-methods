@@ -2,6 +2,8 @@ module GCLAnalysis
 open System
 #load "GCLTypesAST.fs"
 open GCLTypesAST
+#load "AbstractCalculation.fsx"
+open AbstractCalculation
 
 type Sign =
     |Zero
@@ -12,7 +14,7 @@ type SignAtts = Map<string,Set<Sign>>
 type Powerset = List<SignAtts>
 type Analysis = Map<state,Powerset>
 
-let numToSign = function
+let numS = function
     |x when x > 0 -> Plus
     |x when x < 0 -> Minus
     |_ -> Zero
@@ -100,28 +102,6 @@ and setInitSignGC gc sa =
     | ArrowGc(b,c) -> setInitSignBool b sa |> setInitSign c
     | IfElseGc(gc1, gc2) -> setInitSignGC gc1 sa |> setInitSignGC gc2;
 
-let rec addS s1 s2 =
-    match(s1,s2) with
-    |(Minus,Minus) 
-    |(Zero,Minus) 
-    |(Minus, Zero) -> Set.singleton Minus
-    |(Zero, Zero)  -> Set.singleton Zero
-    |(Zero,Plus)
-    |(Plus,Zero)
-    |(Plus,Plus) -> Set.singleton Plus
-    | _ -> Set.ofList [Minus; Plus; Zero];
-
-let rec subS s1 s2 =
-    match(s1,s2) with
-    |(Zero, Plus)
-    |(Minus, Zero)
-    |(Minus, Plus) -> Set.singleton Minus
-    |(Zero, Zero) -> Set.singleton Zero
-    |(Zero, Minus)
-    |(Plus, Zero)
-    |(Plus, Minus) -> Set.singleton Plus
-    | _ -> Set.ofList [Minus; Plus; Zero];
-   
 let innerMap set f sign = let newSet = Set.map (f sign) set
                           Set.foldBack (Set.union) newSet Set.empty
 let calcSet (set1:Set<Sign>) (set2:Set<Sign>) (f:Sign->Sign->Set<Sign>) = 
@@ -133,7 +113,8 @@ calcSet (Set.ofList[Minus]) (Set.ofList[Zero]) subS
 
 let rec ExprSign e sa =
   match e with
-    | Num(x) -> Set.singleton (numToSign x) 
+    | Num(x) -> Set.singleton (numS
+    x) 
     | TimesExpr(x,y) -> exprSign x (mapInts, mapArrays) * exprSign y (mapInts, mapArrays)
     | DivExpr(x,y) -> exprSign x (mapInts, mapArrays) / exprSign y (mapInts, mapArrays)
     | PlusExpr(x,y) -> exprSign x (mapInts, mapArrays) + exprSign y (mapInts, mapArrays)
