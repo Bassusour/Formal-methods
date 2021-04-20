@@ -15,7 +15,8 @@ let uminusS s =
     | Minus -> Plus
     | Plus -> Minus
     | _ -> Zero
-
+and uminusSetS set =
+    Set.map uminusS set
 let rec addS s1 s2 =
     match(s1,s2) with
     |(Minus,Minus) 
