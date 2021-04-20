@@ -12,3 +12,12 @@ The flags are:
     5  
     Enter initial value for A:  
     1,2,3,4  
+-SA -> Sign Analysis  
+        start by declaring number of init memories  
+        then for vars enter + - or 0
+        and for array seperate them by a ","  
+        Example:   
+        Enter initial signs for A:  
+        +,-,0  
+        Enter initial sign for a  
+        +  

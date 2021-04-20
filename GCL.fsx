@@ -115,7 +115,7 @@ let rec evalCum q1 q2 (mapInts:Map<String, int>, mapArrays:Map<String, int []>, 
     | SkipCom -> (mapInts, mapArrays, n)
     | SemiCom(c1, c2) -> let maps = evalCum q1 (Q(n+1)) (mapInts, mapArrays, (n+1)) c1
                          evalCum (Q(n+1)) q2 maps c2
-    | IfCom(gc) -> match evalGC gc (mapInts, mapArrays) with 
+    |IfCom(gc) -> match evalGC gc (mapInts, mapArrays) with 
                    |Some(c) -> evalCum (Q(n+1)) q2 (mapInts, mapArrays, (n+1)) c
                    |None -> raise (StuckException(q1, mapInts, mapArrays))
     |DoCom(gc) -> match evalGC gc (mapInts, mapArrays) with 

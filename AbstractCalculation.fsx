@@ -121,5 +121,5 @@ let rec andS s1 s2 =
 
 let rec nutS s = 
     match s with
-    | TrueBool -> Set.singleton FalseBool
-    | _ -> Set.singleton TrueBool
+    | TrueBool -> FalseBool
+    | _ -> TrueBool
