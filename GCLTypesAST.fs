@@ -2,6 +2,11 @@
 // to store represent arithmetic expressions
 module GCLTypesAST
 
+type Sign =
+    |Zero
+    |Plus
+    |Minus
+
 type expr = 
   | Num of int
   | TimesExpr of (expr * expr)

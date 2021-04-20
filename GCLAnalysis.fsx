@@ -1,20 +1,15 @@
 module GCLAnalysis
 open System
 open System.Numerics
-#load "GCLTypesAST.fs"
-open GCLTypesAST
+//#load "GCLTypesAST.fs"
+//open GCLTypesAST
 #load "AbstractCalculation.fsx"
 open AbstractCalculation
-
-type Sign =
-    |Zero
-    |Plus
-    |Minus
 
 type ArrSign = Map<string,Set<Sign>>
 type VarSign  = Map<string,Sign>
 type SignMem = VarSign * ArrSign
-type Powerset = List<SignMem>
+type Powerset = Set<SignMem>
 type Analysis = Map<state,Powerset>
 
 let numS = function
@@ -33,9 +28,11 @@ let rec stringToSigns strings (set:Set<Sign>) =
     match strings with
     |[] -> set
     |x::xs -> stringToSigns xs (set.Add(stringToSign x ))
+    
 let innerMap set f sign = let newSet = Set.map (f sign) set
                           Set.foldBack (Set.union) newSet Set.empty
-let calcSet (set1:Set<Sign>) (set2:Set<Sign>) (f:Sign->Sign->Set<Sign>) = 
+
+let calcSet (set1) (set2) (f) = 
     let newSet =Set.map (innerMap set2 f) set1
     Set.foldBack (Set.union) newSet Set.empty
 
@@ -56,13 +53,38 @@ let rec exprSign e (mem:SignMem) =
                    | Some(x) -> Set.singleton x
                    | None    -> failwith "Variable not found"
     | Array(name, e) -> match (snd mem).TryFind name with
-                        | Some(a) -> if not ((Set.union (exprSign e mem) (Set.ofList [Zero; Plus])).IsEmpty) then a
+                        | Some(a) -> if not ((Set.intersect (exprSign e mem) (Set.ofList [Zero; Plus])).IsEmpty) then a
                                      else Set.empty
                         | None    -> failwith "Array not found";
 
 
+let rec boolSign b (mem:SignMem) = 
+    match b with
+    | TrueBool -> Set.singleton TrueBool
+    | EqualBool(e1,e2) -> calcSet(exprSign e1 (mem)) (exprSign e2 (mem)) equalS
+    | GtBool(e1,e2) -> calcSet(exprSign e1 (mem)) (exprSign e2 (mem)) greaterS
+    | GeqBool(e1,e2) -> calcSet(exprSign e1 (mem)) (exprSign e2 (mem)) greaterEqualS
+    | AndBool(b1,b2) 
+    | ScandBool(b1,b2) -> calcSet(boolSign b1 (mem)) (boolSign b2 (mem)) andS
+//    | NutBool(b1) -> Set.map nutS (boolSign b1 mem) 
+    | OrBool(b1,b2)
+    | ScorBool(b1,b2) -> calcSet(boolSign b1 (mem)) (boolSign b2 (mem)) orS
+    | NeqBool(e1,e2) -> calcSet(exprSign e1 (mem)) (exprSign e2 (mem)) notEqualS
+    | LtBool(e1,e2) -> calcSet(exprSign e1 (mem)) (exprSign e2 (mem)) lessS
+    | LeqBool(e1,e2) -> calcSet(exprSign e1 (mem)) (exprSign e2 (mem)) lessEqualsS
 
+let rec assignAllMems n e (ps:Powerset) = 
+    Set.map (assignAllMemsH n e) ps
+and assignAllMemsH n e signmem = 
+    match signmem with
+    | (var,arr) -> let signs = (exprSign e)
+                   Set.map (setVar var arr n) signs
+and setVar varSign varArray n sign = 
+    (varSign.Add n sign, varArray)  
 
+let rec evalComm ps comm = 
+    match comm with
+    | AssCom(n,e) -> assignAllMems n e ps
 
 
 let insertSignInt name (sa:SignMem) = 
@@ -134,4 +156,5 @@ let signAnalysis com =
     printfn "How many abstract memories do you want?"
     let n = int (Console.ReadLine())
     let sa = beginInit 0 n List.empty com
+    evalComm sa com
     printfn "%A" sa

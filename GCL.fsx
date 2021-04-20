@@ -13,8 +13,6 @@ open GraphPrinter
 open PrintAST
 #load "GCLAnalysis.fsx"
 open GCLAnalysis
-#load "signAnalysis.fsx"
-open signAnalysis
 
 let rec pow a b =
     match b with

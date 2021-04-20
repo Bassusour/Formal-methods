@@ -10,7 +10,7 @@ let rec powS s1 s2 =
 
 let uplusS s = s;
 
-let uminusS s = 
+let rec uminusS s = 
     match s with
     | Minus -> Plus
     | Plus -> Minus
@@ -59,7 +59,7 @@ let rec divideS s1 s2 =
 let rec greaterS s1 s2 = 
     match (s1, s2) with
     | (Minus, Minus) 
-    | (Plus, Plus) -> Set.ofList [TrueBool, FalseBool]
+    | (Plus, Plus) -> Set.ofList [TrueBool; FalseBool]
     | (Zero, Minus)
     | (Plus, Minus)
     | (Plus, Zero) -> Set.singleton TrueBool
@@ -116,8 +116,8 @@ let rec orS s1 s2 =
 
 let rec andS s1 s2 = 
     match (s1, s2) with
-    | (TrueBool, TrueBool) -> TrueBool
-    | _ -> FalseBool;
+    | (TrueBool, TrueBool) -> Set.singleton TrueBool
+    | _ -> Set.singleton FalseBool;
 
 let rec nutS s = 
     match s with
