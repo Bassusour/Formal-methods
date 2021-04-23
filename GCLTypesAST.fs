@@ -53,6 +53,7 @@ type flag =
   |PFlag  
   |StepFlag
   |SAFlag
+  |SECFlag
 
 type state =
   |Qs

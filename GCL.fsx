@@ -145,7 +145,7 @@ let rec compute n =
     if n = 0 then
         printfn "Bye bye"
     else
-        printfn "Enter ( -SA | -SW | -ND | -D | -P) Guarded Command code : "
+        printfn "Enter ( -SEC | -SA | -SW | -ND | -D | -P) Guarded Command code : "
         try
         let e = parse (Console.ReadLine())
         match e with 
@@ -166,6 +166,7 @@ let rec compute n =
                               printfn "Syntax is correct"
             | (SAFlag, com) -> signAnalysis com
             | (det, com) -> makeNDGraph com det
+            | (SECFlag, com) -> gclSecurity com
         compute 1
         with err -> printfn "Syntax Wrong"
                     printfn "%s" err.Message

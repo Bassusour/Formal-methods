@@ -6,7 +6,7 @@ open GCLTypesAST
 // Declare the tokens (terminal symbols)
 %token <int> NUM 
 %token <string> VAR
-%token  IFELSE ASS SKIP SEMI IF FI DO OD ARROW LBRAC RBRAC TIMES DIV PLUS MINUS POW LPAR RPAR SQRT TRUE FALSE OR SCOR AND SCAND NUT EQUAL NEQ GT LT GEQ LEQ EOF DFLAG NDFLAG PFLAG STEPFLAG SAFLAG
+%token  IFELSE ASS SKIP SEMI IF FI DO OD ARROW LBRAC RBRAC TIMES DIV PLUS MINUS POW LPAR RPAR SQRT TRUE FALSE OR SCOR AND SCAND NUT EQUAL NEQ GT LT GEQ LEQ EOF DFLAG NDFLAG PFLAG STEPFLAG SAFLAG SECFLAG
 // NOTE: the actual formats of these tokens are defined in the lexer file
 //       as regular expressions
 
@@ -69,6 +69,7 @@ f:
   | PFLAG                         {PFlag}
   | STEPFLAG                      {StepFlag}
   | SAFLAG                        {SAFlag}
+  | SECFLAG                       {SECFlag}
 
 //GC -> b -> C | GC [] GC
 gc:
