@@ -1,7 +1,6 @@
 module GCLAnalysis
 open System
-open System.Numerics
-//#load "GCLTypesAST.fs"
+#load "GCLTypesAST.fs"
 //open GCLTypesAST
 #load "AbstractCalculation.fsx"
 open AbstractCalculation
@@ -12,6 +11,11 @@ type SignMem = VarSign * ArrSign
 type Powerset = Set<SignMem>
 type Analysis = Map<state,Powerset>
 
+
+let find (map:Map<'k,'v>) key =
+    match map.TryFind key with
+    |Some(e) -> e
+    |None -> failwith "could not find waldo"
 let numS = function
     |x when x > 0 -> Plus
     |x when x < 0 -> Minus
@@ -23,6 +27,16 @@ let stringToSign str =
     |"-" -> Minus
     |"0" -> Zero
     | _  -> failwith "not a sign"
+
+let signToString sign =
+    match sign with
+    |Plus -> "+"
+    |Minus -> "-"
+    |Zero -> "0"
+
+let signsToString signs =
+   let str = "{" + (Set.foldBack (fun s a -> (signToString s) + "," + a) signs "")
+   str.[0..(str.Length-2)] + "}"
 
 let rec stringToSigns strings (set:Set<Sign>) =
     match strings with
@@ -66,7 +80,7 @@ let rec boolSign b (mem:SignMem) =
     | GeqBool(e1,e2) -> calcSet(exprSign e1 (mem)) (exprSign e2 (mem)) greaterEqualS
     | AndBool(b1,b2) 
     | ScandBool(b1,b2) -> calcSet(boolSign b1 (mem)) (boolSign b2 (mem)) andS
-//    | NutBool(b1) -> Set.map nutS (boolSign b1 mem) 
+    | NutBool(b1) -> Set.map nutS (boolSign b1 mem) 
     | OrBool(b1,b2)
     | ScorBool(b1,b2) -> calcSet(boolSign b1 (mem)) (boolSign b2 (mem)) orS
     | NeqBool(e1,e2) -> calcSet(exprSign e1 (mem)) (exprSign e2 (mem)) notEqualS
@@ -74,18 +88,73 @@ let rec boolSign b (mem:SignMem) =
     | LeqBool(e1,e2) -> calcSet(exprSign e1 (mem)) (exprSign e2 (mem)) lessEqualsS
 
 let rec assignAllMems n e (ps:Powerset) = 
-    Set.map (assignAllMemsH n e) ps
+   Set.foldBack Set.union (Set.map (assignAllMemsH n e) ps) Set.empty
 and assignAllMemsH n e signmem = 
     match signmem with
-    | (var,arr) -> let signs = (exprSign e)
+    | (var,arr) -> let signs = (exprSign e (var,arr))
                    Set.map (setVar var arr n) signs
 and setVar varSign varArray n sign = 
-    (varSign.Add n sign, varArray)  
+    (varSign.Add (n,sign), varArray)  
 
-let rec evalComm ps comm = 
+let addToAnal q ps (a:Analysis) =
+    match a.TryFind q with
+    |Some(ps2) -> a.Add(q, Set.union ps ps2)
+    |None      -> a.Add(q, ps)
+
+let rec assignArray n e (ps:Powerset) = 
+    Set.foldBack Set.union (Set.map (assArrInMem n e) ps) Set.empty
+and assArrInMem n e sm =
+    match sm with
+    |(var,arr) -> let eSigns = (exprSign e sm)
+                  let aSigns = find arr n
+                  let mutable rest = Set.empty
+                  for s in eSigns do
+                     let noDel = (var,arr.Add (n, (Set.add s aSigns)))
+                     let del = Set.map (setAVar var arr n s aSigns) aSigns
+                     rest <- Set.add noDel (Set.union del rest) 
+                  rest
+and setAVar var arr n eSigns aSigns signTR =
+    (var,arr.Add (n, (Set.union (aSigns.Remove signTR) (Set.singleton eSigns))))
+
+let isPosetiv e1 mem =
+    not ((Set.intersect (exprSign e1 mem) (Set.ofList [Zero; Plus])).IsEmpty)
+
+let rec getDet gc =
+    match gc with
+    |ArrowGc(b,c) -> NutBool(b) 
+    |IfElseGc(gc1, gc2) -> let b = getDet gc1
+                           AndBool(b, getDet gc2)
+
+let rec evalComm q1 q2 ((a:Analysis),n) comm = 
     match comm with
-    | AssCom(n,e) -> assignAllMems n e ps
+    | AssCom(name,e) -> (addToAnal q2 (assignAllMems name e (find a q1)) a,n)
+    | AssArrayCom(name,e1,e2) -> if not(Set.exists (isPosetiv e1) (find a q1)) then (a,n)
+                                 else (addToAnal q2 (assignArray name e2 (find a q1)) a,n)
+    |SkipCom -> (a,n)
+    |SemiCom(c1,c2) -> let anal = evalComm q1 (Q(n+1)) (a,(n+1)) c1
+                       evalComm (Q(n+1)) q2 anal c2
+    |IfCom(gc) -> gcSign q1 q2 (a,n) gc
+    |DoCom(gc) -> let newAnal = gcSign q1 q1 (a,n) gc
+                  match newAnal with
+                  |(newA, n2) when newA <> a -> evalComm q1 q2 (newA,n) (DoCom(gc))
+                  |(newA, n2) -> let ps = find a q1
+                                 let f mem = Set.contains TrueBool (boolSign (getDet gc) mem)
+                                 let anal = addToAnal (q2) (Set.filter f ps) newA
+                                 (anal,n2)
+                        
+and gcSign q1 q2 (a,n) gc =
+    match gc with
+    |ArrowGc(b,c) -> let ps = find a q1
+                     let f mem = Set.contains TrueBool (boolSign b mem)
+                     let anal = addToAnal (Q(n+1)) (Set.filter f ps) a
+                     evalComm (Q(n+1)) q2 (anal,n+1) c
+    |IfElseGc(gc1, gc2) -> let anal = gcSign q1 q2 (a,n) gc1
+                           gcSign q1 q2 anal gc2
 
+
+
+   // let maps = evalCum q1 (Q(n+1)) (mapInts, mapArrays, (n+1)) c1
+   //evalCum (Q(n+1)) q2 maps c2
 
 let insertSignInt name (sa:SignMem) = 
     match (fst sa).TryFind name with
@@ -145,16 +214,38 @@ and setInitSignGC gc sa =
                                                 
 
 
-let rec beginInit c n (ps:Powerset) com =
-    printfn "Enter signs for memorie %d" c
+let rec beginInit c n (ps:Powerset) com =   
     match c with
     |x when x = n -> ps
-    |_ -> beginInit (c+1) n ((setInitSign com (Map.empty,Map.empty))::ps) com
+    |_ ->  printfn "Enter signs for memory %d" c
+           beginInit (c+1) n (ps.Add (setInitSign com (Map.empty,Map.empty))) com
+
+let rec printAnalysis c n (a:Analysis) =
+    match c with
+    |x when x > n -> c
+    |x -> printPowerSet (Q(x)) (find a (Q(x)))
+          printAnalysis (c+1) n a
+and printPowerSet q ps =
+    printfn "%s:" (stateToString q)
+    for mem in ps do
+        printSignMem mem
+        printfn ""
+and printSignMem (var, arr) =
+    for v in var do
+        printf "%s: %s  "  v.Key (signToString v.Value)
+    for a in arr do
+        printf "%s: %s  "  a.Key (signsToString a.Value)
+    
 
 
 let signAnalysis com =
     printfn "How many abstract memories do you want?"
     let n = int (Console.ReadLine())
-    let sa = beginInit 0 n List.empty com
-    evalComm sa com
-    printfn "%A" sa
+    let sa = beginInit 0 n Set.empty com
+    let mutable a = Map.empty
+    a <- a.Add (Qs, sa)
+    let (anal, nStates) = evalComm Qs Qf (a,0) com
+    printPowerSet Qs (find anal Qs)
+    printAnalysis 1 nStates anal
+    printPowerSet Qf (find anal Qf)
+
