@@ -13,6 +13,8 @@ open GraphPrinter
 open PrintAST
 #load "GCLAnalysis.fsx"
 open GCLAnalysis
+#load "GCLSecurity.fsx"
+open GCLSecurity
 
 let rec pow a b =
     match b with
@@ -165,8 +167,8 @@ let rec compute n =
             | (PFlag, com) -> printCom com 0
                               printfn "Syntax is correct"
             | (SAFlag, com) -> signAnalysis com
-            | (det, com) -> makeNDGraph com det
             | (SECFlag, com) -> gclSecurity com
+            | (det, com) -> makeNDGraph com det
         compute 1
         with err -> printfn "Syntax Wrong"
                     printfn "%s" err.Message

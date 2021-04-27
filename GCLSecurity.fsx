@@ -1,13 +1,14 @@
+module GCLSecurity
 open System
 #load "GCLTypesAST.fs"
-open GCLTypesAST
+//open GCLTypesAST
 type SecName = string
 type Parents = List<SecName>
 type AdjacencyList = Map<string, Parents> 
 type flow = string * string
 
 
-let rec makeLettuce = 
+let rec makeLettuce () =
     printfn "Enter security lattice"
     let input = string (Console.ReadLine())
     let inputList = List.ofArray (input.Replace(" ", "").Split [|','|])
@@ -15,15 +16,15 @@ let rec makeLettuce =
 and initLattice list am = 
     match list with
     | [] -> am
-    | s::xs -> let component = s.Split[|'<'|] 
-               let amAdded = addToAdjacencyMatrix am component.[1] component.[0]
+    | s::xs -> let comp = s.Split[|'<'|] 
+               let amAdded = addToAdjacencyMatrix am comp.[1] comp.[0]
                initLattice xs amAdded
 and addToAdjacencyMatrix am parent child = 
     match am.TryFind child with
     | Some (parents) -> am.Add(child, parent::parents)
     | None -> am.Add(child, [parent])
 
-let rec initVariables = 
+let rec initVariables () = 
     printfn "Enter initial variable security"
     let input = string (Console.ReadLine())
     let inputList = List.ofArray (input.Replace(" ", "").Split [|','|])
@@ -76,47 +77,61 @@ let rec secExpr e =
     | Var(name) -> [name]
     | Array(name, e) -> [name]@(secExpr e)
 
-let rec secBool b (mapInts:Map<String, int>, mapArrays:Map<String, int []>) = 
+let rec secBool b = 
     match b with
-    | TrueBool -> true 
-    | FalseBool -> false 
-    | EqualBool(e1,e2) -> eval e1 (mapInts, mapArrays) = eval e2 (mapInts, mapArrays)
-    | GtBool(e1, e2)   -> eval e1 (mapInts, mapArrays) > eval e2 (mapInts, mapArrays)
-    | GeqBool(e1, e2)  -> eval e1 (mapInts, mapArrays) >= eval e2 (mapInts, mapArrays)
-    | LtBool(e1, e2)   -> eval e1 (mapInts, mapArrays) < eval e2 (mapInts, mapArrays)
-    | LeqBool(e1, e2)  -> eval e1 (mapInts, mapArrays) <= eval e2 (mapInts, mapArrays)
-    | ScandBool(b1,b2) | AndBool(b1, b2)  -> evalBool b1 (mapInts, mapArrays) && evalBool b2 (mapInts, mapArrays)
-    | OrBool(b1, b2) | ScorBool(b1,b2) -> evalBool b1 (mapInts, mapArrays) || evalBool b2 (mapInts, mapArrays)
-    | NutBool(b1) -> not(evalBool b1 (mapInts, mapArrays))
+    | TrueBool ->  []
+    | FalseBool -> []
+    | EqualBool(e1,e2) -> (secExpr e1)@(secExpr e2)
+    | GtBool(e1, e2)   -> (secExpr e1)@(secExpr e2)
+    | GeqBool(e1, e2)  -> (secExpr e1)@(secExpr e2)
+    | LtBool(e1, e2)   -> (secExpr e1)@(secExpr e2)
+    | LeqBool(e1, e2)  -> (secExpr e1)@(secExpr e2)
+    | ScandBool(b1,b2) | AndBool(b1, b2)  -> (secBool b1)@(secBool b2)
+    | OrBool(b1, b2) | ScorBool(b1,b2) -> (secBool b1)@(secBool b2)
+    | NutBool(b1) -> secBool b1
 
 let mixMatch inFlows outFlows =
     let mutable list = [] 
     for f1 in inFlows do
         for f2 in outFlows do
             list <- (f1,f2)::list
+    list
+            
 
-let rec secCum af =
+let rec secCum c af bonusInFlows=
     match c with
     | AssCom(s,e) -> let inFlow = secExpr e
-                     mixMatch inFlow [s]
+                     af@(mixMatch (inFlow@bonusInFlows) [s])
     | AssArrayCom(name,e1,e2) -> let inFlow = (secExpr e1) @ (secExpr e2)
-                                 mixMatch inFlow [name]
-    | SkipCom -> 
-    | SemiCom(c1, c2) -> 
-    |IfCom(gc) ->  
-    |DoCom(gc) -> 
-and secGC gc (mapInts, mapArrays) = 
+                                 af@(mixMatch (inFlow@bonusInFlows) [name])
+    | SkipCom -> af
+    | SemiCom(c1, c2) -> let afNew = secCum c1 af bonusInFlows 
+                         secCum c2 afNew bonusInFlows
+    |IfCom(gc) -> secGC gc af bonusInFlows
+    |DoCom(gc) -> secGC gc af bonusInFlows
+and secGC gc af bif = 
     match gc with
-    | ArrowGc(b,c) -> 
-    | ArrowGc(b,c) ->
-    | IfElseGc(gc1, gc2) -> 
+    | ArrowGc(b,c) -> secCum c af ((secBool b)@bif)
+    | IfElseGc(gc1, gc2) -> let newAf = secGC gc1 af bif
+                            secGC gc2 newAf bif
+ 
+let printFlow (i,o) = printf "%s → %s, " i o
 
+let getVios ac al = 
+    Set.difference ac al
 
 let gclSecurity com =
-    let lettuce = makeLettuce 
-    let initialVariables = initVariables
-    let allowedFlows = allowedFlows lettuce initialVariables
-    let actualFlows = secCom com []
-    printfn "%A" allowedFlows
-
-gclSecurity
+    let lettuce = makeLettuce ()
+    let initialVariables = initVariables ()
+    let allowedFlows = Set.ofList (allowedFlows lettuce initialVariables)
+    let actualFlows = Set.ofList (secCum com [] [])
+    printfn "ActualFlows:"
+    Set.map printFlow actualFlows
+    printfn ""
+    printfn "AllowedFlows:"
+    Set.map printFlow allowedFlows
+    printfn ""
+    let violations = getVios actualFlows allowedFlows
+    printfn "Violations:"
+    Set.map printFlow violations|> ignore
+    printfn ""
