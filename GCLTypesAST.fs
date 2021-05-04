@@ -1,5 +1,5 @@
-// This file implements a module where we define a data type "expr"
-// to store represent arithmetic expressions
+// This file implements a module where we define a data type "Expr"
+// to store represent arithmetic Expressions
 module GCLTypesAST
 
 type Sign =
@@ -7,43 +7,43 @@ type Sign =
     |Plus
     |Minus
 
-type expr = 
+type Expr = 
   | Num of int
-  | TimesExpr of (expr * expr)
-  | DivExpr of (expr * expr)
-  | PlusExpr of (expr * expr)
-  | MinusExpr of (expr * expr)
-  | PowExpr of (expr * expr)
-  | UPlusExpr of (expr)
-  | UMinusExpr of (expr)
+  | TimesExpr of (Expr * Expr)
+  | DivExpr of (Expr * Expr)
+  | PlusExpr of (Expr * Expr)
+  | MinusExpr of (Expr * Expr)
+  | PowExpr of (Expr * Expr)
+  | UPlusExpr of (Expr)
+  | UMinusExpr of (Expr)
   | Var of string
-  | Array of (string * expr)
+  | Array of (string * Expr)
 
 
-type boolExpr =
-  |OrBool of (boolExpr * boolExpr)
-  |ScorBool of (boolExpr * boolExpr)
-  |AndBool of (boolExpr* boolExpr)
-  |ScandBool of (boolExpr* boolExpr)
-  |NutBool of (boolExpr)
-  |EqualBool of (expr * expr)
-  |NeqBool of (expr * expr)
-  |LtBool of (expr * expr)
-  |GtBool of (expr * expr)
-  |GeqBool of (expr * expr)
-  |LeqBool of (expr * expr)
+type BoolExpr =
+  |OrBool of (BoolExpr * BoolExpr)
+  |ScorBool of (BoolExpr * BoolExpr)
+  |AndBool of (BoolExpr* BoolExpr)
+  |ScandBool of (BoolExpr* BoolExpr)
+  |NutBool of (BoolExpr)
+  |EqualBool of (Expr * Expr)
+  |NeqBool of (Expr * Expr)
+  |LtBool of (Expr * Expr)
+  |GtBool of (Expr * Expr)
+  |GeqBool of (Expr * Expr)
+  |LeqBool of (Expr * Expr)
   |TrueBool
   |FalseBool
 
-type com =
-  |AssCom of (string * expr)
-  |AssArrayCom of (string * expr * expr)
+type Com =
+  |AssCom of (string * Expr)
+  |AssArrayCom of (string * Expr * Expr)
   |SkipCom
-  |SemiCom of (com * com)
+  |SemiCom of (Com * Com)
   |IfCom of gc
   |DoCom of gc
 and gc =
-  |ArrowGc of (boolExpr * com)
+  |ArrowGc of (BoolExpr * Com)
   |IfElseGc of (gc * gc)
 
 
@@ -54,6 +54,7 @@ type flag =
   |StepFlag
   |SAFlag
   |SECFlag
+  |FlemmingFlag
 
 type state =
   |Qs

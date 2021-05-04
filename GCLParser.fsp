@@ -1,4 +1,4 @@
-// Open the file that defines the type "expr" we shall use as AST
+// Open the file that defines the type "Expr" we shall use as AST
 %{
 open GCLTypesAST
 %}
@@ -20,21 +20,21 @@ open GCLTypesAST
 %start start
 
 // We specify the return type of each of then non-terminal symbols
-%type <flag*com> start
-%type <com> c
+%type <flag*Com> start
+%type <Com> c
 %type <gc> gc 
 %type <gc> gc2 
 %type <flag> f
 
-%type <boolExpr> b
-%type <boolExpr> b1
-%type <boolExpr> b2
-%type <boolExpr> b3
+%type <BoolExpr> b
+%type <BoolExpr> b1
+%type <BoolExpr> b2
+%type <BoolExpr> b3
 
-%type <expr> a
-%type <expr> a1
-%type <expr> a2
-%type <expr> a3
+%type <Expr> a
+%type <Expr> a1
+%type <Expr> a2
+%type <Expr> a3
 
 // Grammar productions
 %%

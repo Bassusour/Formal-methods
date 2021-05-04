@@ -365,7 +365,7 @@ let _fsyacc_immediateActions = [|65535us; 49152us; 65535us; 65535us; 16385us; 65
 let _fsyacc_reductions ()  =    [| 
 # 366 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
-            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : flag*com)) in
+            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : flag*Com)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
@@ -375,7 +375,7 @@ let _fsyacc_reductions ()  =    [|
 # 375 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : flag)) in
-            let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : com)) in
+            let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : Com)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
@@ -383,10 +383,10 @@ let _fsyacc_reductions ()  =    [|
                                                   (_1,_2) 
                    )
 # 46 "GCLParser.fsp"
-                 : flag*com));
+                 : flag*Com));
 # 387 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
-            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : com)) in
+            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : Com)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
@@ -394,11 +394,11 @@ let _fsyacc_reductions ()  =    [|
                                                  (PFlag ,_1) 
                    )
 # 47 "GCLParser.fsp"
-                 : flag*com));
+                 : flag*Com));
 # 398 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : string)) in
-            let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : expr)) in
+            let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : Expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
@@ -406,12 +406,12 @@ let _fsyacc_reductions ()  =    [|
                                                         AssCom(_1,_3)
                    )
 # 58 "GCLParser.fsp"
-                 : com));
+                 : Com));
 # 410 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : string)) in
-            let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : expr)) in
-            let _6 = (let data = parseState.GetInput(6) in (Microsoft.FSharp.Core.Operators.unbox data : expr)) in
+            let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : Expr)) in
+            let _6 = (let data = parseState.GetInput(6) in (Microsoft.FSharp.Core.Operators.unbox data : Expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
@@ -419,7 +419,7 @@ let _fsyacc_reductions ()  =    [|
                                                         AssArrayCom(_1,_3,_6)
                    )
 # 59 "GCLParser.fsp"
-                 : com));
+                 : Com));
 # 423 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
@@ -429,11 +429,11 @@ let _fsyacc_reductions ()  =    [|
                                                         SkipCom
                    )
 # 60 "GCLParser.fsp"
-                 : com));
+                 : Com));
 # 433 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
-            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : com)) in
-            let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : com)) in
+            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : Com)) in
+            let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : Com)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
@@ -441,7 +441,7 @@ let _fsyacc_reductions ()  =    [|
                                                         SemiCom(_1,_3)
                    )
 # 61 "GCLParser.fsp"
-                 : com));
+                 : Com));
 # 445 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
             let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : gc)) in
@@ -452,7 +452,7 @@ let _fsyacc_reductions ()  =    [|
                                                         IfCom(_2)
                    )
 # 62 "GCLParser.fsp"
-                 : com));
+                 : Com));
 # 456 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
             let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : gc)) in
@@ -463,7 +463,7 @@ let _fsyacc_reductions ()  =    [|
                                                         DoCom(_2)
                    )
 # 63 "GCLParser.fsp"
-                 : com));
+                 : Com));
 # 467 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
@@ -549,8 +549,8 @@ let _fsyacc_reductions ()  =    [|
                  : gc));
 # 550 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
-            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : boolExpr)) in
-            let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : com)) in
+            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : BoolExpr)) in
+            let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : Com)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
@@ -561,8 +561,8 @@ let _fsyacc_reductions ()  =    [|
                  : gc));
 # 562 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
-            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : expr)) in
-            let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : expr)) in
+            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : Expr)) in
+            let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : Expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
@@ -570,11 +570,11 @@ let _fsyacc_reductions ()  =    [|
                                         PlusExpr(_1,_3) 
                    )
 # 86 "GCLParser.fsp"
-                 : expr));
+                 : Expr));
 # 574 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
-            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : expr)) in
-            let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : expr)) in
+            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : Expr)) in
+            let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : Expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
@@ -582,10 +582,10 @@ let _fsyacc_reductions ()  =    [|
                                         MinusExpr(_1,_3) 
                    )
 # 87 "GCLParser.fsp"
-                 : expr));
+                 : Expr));
 # 586 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
-            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : expr)) in
+            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : Expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
@@ -593,11 +593,11 @@ let _fsyacc_reductions ()  =    [|
                                                  _1 
                    )
 # 88 "GCLParser.fsp"
-                 : expr));
+                 : Expr));
 # 597 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
-            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : expr)) in
-            let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : expr)) in
+            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : Expr)) in
+            let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : Expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
@@ -605,11 +605,11 @@ let _fsyacc_reductions ()  =    [|
                                          TimesExpr(_1,_3) 
                    )
 # 91 "GCLParser.fsp"
-                 : expr));
+                 : Expr));
 # 609 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
-            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : expr)) in
-            let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : expr)) in
+            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : Expr)) in
+            let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : Expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
@@ -617,10 +617,10 @@ let _fsyacc_reductions ()  =    [|
                                          DivExpr(_1,_3) 
                    )
 # 92 "GCLParser.fsp"
-                 : expr));
+                 : Expr));
 # 621 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
-            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : expr)) in
+            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : Expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
@@ -628,11 +628,11 @@ let _fsyacc_reductions ()  =    [|
                                                   _1 
                    )
 # 93 "GCLParser.fsp"
-                 : expr));
+                 : Expr));
 # 632 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
-            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : expr)) in
-            let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : expr)) in
+            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : Expr)) in
+            let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : Expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
@@ -640,10 +640,10 @@ let _fsyacc_reductions ()  =    [|
                                          PowExpr(_1,_3) 
                    )
 # 96 "GCLParser.fsp"
-                 : expr));
+                 : Expr));
 # 644 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
-            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : expr)) in
+            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : Expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
@@ -651,10 +651,10 @@ let _fsyacc_reductions ()  =    [|
                                                   _1 
                    )
 # 97 "GCLParser.fsp"
-                 : expr));
+                 : Expr));
 # 655 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
-            let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : expr)) in
+            let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : Expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
@@ -662,10 +662,10 @@ let _fsyacc_reductions ()  =    [|
                                                 UPlusExpr(_2) 
                    )
 # 100 "GCLParser.fsp"
-                 : expr));
+                 : Expr));
 # 666 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
-            let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : expr)) in
+            let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : Expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
@@ -673,7 +673,7 @@ let _fsyacc_reductions ()  =    [|
                                                 UMinusExpr(_2) 
                    )
 # 101 "GCLParser.fsp"
-                 : expr));
+                 : Expr));
 # 677 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : int)) in
@@ -684,7 +684,7 @@ let _fsyacc_reductions ()  =    [|
                                                 Num(_1) 
                    )
 # 102 "GCLParser.fsp"
-                 : expr));
+                 : Expr));
 # 688 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : string)) in
@@ -695,11 +695,11 @@ let _fsyacc_reductions ()  =    [|
                                                 Var(_1) 
                    )
 # 103 "GCLParser.fsp"
-                 : expr));
+                 : Expr));
 # 699 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : string)) in
-            let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : expr)) in
+            let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : Expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
@@ -707,10 +707,10 @@ let _fsyacc_reductions ()  =    [|
                                                 Array(_1, _3)
                    )
 # 104 "GCLParser.fsp"
-                 : expr));
+                 : Expr));
 # 711 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
-            let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : expr)) in
+            let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : Expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
@@ -718,11 +718,11 @@ let _fsyacc_reductions ()  =    [|
                                                 _2 
                    )
 # 105 "GCLParser.fsp"
-                 : expr));
+                 : Expr));
 # 722 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
-            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : boolExpr)) in
-            let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : boolExpr)) in
+            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : BoolExpr)) in
+            let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : BoolExpr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
@@ -730,11 +730,11 @@ let _fsyacc_reductions ()  =    [|
                                                  OrBool (_1,_3) 
                    )
 # 109 "GCLParser.fsp"
-                 : boolExpr));
+                 : BoolExpr));
 # 734 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
-            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : boolExpr)) in
-            let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : boolExpr)) in
+            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : BoolExpr)) in
+            let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : BoolExpr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
@@ -742,10 +742,10 @@ let _fsyacc_reductions ()  =    [|
                                                  ScorBool (_1,_3) 
                    )
 # 110 "GCLParser.fsp"
-                 : boolExpr));
+                 : BoolExpr));
 # 746 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
-            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : boolExpr)) in
+            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : BoolExpr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
@@ -753,11 +753,11 @@ let _fsyacc_reductions ()  =    [|
                                                  _1 
                    )
 # 111 "GCLParser.fsp"
-                 : boolExpr));
+                 : BoolExpr));
 # 757 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
-            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : boolExpr)) in
-            let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : boolExpr)) in
+            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : BoolExpr)) in
+            let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : BoolExpr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
@@ -765,11 +765,11 @@ let _fsyacc_reductions ()  =    [|
                                                   AndBool (_1,_3)
                    )
 # 114 "GCLParser.fsp"
-                 : boolExpr));
+                 : BoolExpr));
 # 769 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
-            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : boolExpr)) in
-            let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : boolExpr)) in
+            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : BoolExpr)) in
+            let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : BoolExpr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
@@ -777,10 +777,10 @@ let _fsyacc_reductions ()  =    [|
                                                   ScandBool (_1,_3)
                    )
 # 115 "GCLParser.fsp"
-                 : boolExpr));
+                 : BoolExpr));
 # 781 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
-            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : boolExpr)) in
+            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : BoolExpr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
@@ -788,10 +788,10 @@ let _fsyacc_reductions ()  =    [|
                                                    _1 
                    )
 # 116 "GCLParser.fsp"
-                 : boolExpr));
+                 : BoolExpr));
 # 792 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
-            let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : boolExpr)) in
+            let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : BoolExpr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
@@ -799,10 +799,10 @@ let _fsyacc_reductions ()  =    [|
                                               NutBool (_2)
                    )
 # 119 "GCLParser.fsp"
-                 : boolExpr));
+                 : BoolExpr));
 # 803 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
-            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : boolExpr)) in
+            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : BoolExpr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
@@ -810,11 +810,11 @@ let _fsyacc_reductions ()  =    [|
                                                _1 
                    )
 # 120 "GCLParser.fsp"
-                 : boolExpr));
+                 : BoolExpr));
 # 814 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
-            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : expr)) in
-            let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : expr)) in
+            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : Expr)) in
+            let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : Expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
@@ -822,11 +822,11 @@ let _fsyacc_reductions ()  =    [|
                                          EqualBool (_1, _3)
                    )
 # 123 "GCLParser.fsp"
-                 : boolExpr));
+                 : BoolExpr));
 # 826 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
-            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : expr)) in
-            let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : expr)) in
+            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : Expr)) in
+            let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : Expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
@@ -834,11 +834,11 @@ let _fsyacc_reductions ()  =    [|
                                          NeqBool (_1,_3)
                    )
 # 124 "GCLParser.fsp"
-                 : boolExpr));
+                 : BoolExpr));
 # 838 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
-            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : expr)) in
-            let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : expr)) in
+            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : Expr)) in
+            let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : Expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
@@ -846,11 +846,11 @@ let _fsyacc_reductions ()  =    [|
                                          LtBool (_1,_3)
                    )
 # 125 "GCLParser.fsp"
-                 : boolExpr));
+                 : BoolExpr));
 # 850 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
-            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : expr)) in
-            let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : expr)) in
+            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : Expr)) in
+            let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : Expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
@@ -858,11 +858,11 @@ let _fsyacc_reductions ()  =    [|
                                          GtBool (_1,_3)
                    )
 # 126 "GCLParser.fsp"
-                 : boolExpr));
+                 : BoolExpr));
 # 862 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
-            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : expr)) in
-            let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : expr)) in
+            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : Expr)) in
+            let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : Expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
@@ -870,11 +870,11 @@ let _fsyacc_reductions ()  =    [|
                                          GeqBool (_1,_3)
                    )
 # 127 "GCLParser.fsp"
-                 : boolExpr));
+                 : BoolExpr));
 # 874 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
-            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : expr)) in
-            let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : expr)) in
+            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : Expr)) in
+            let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : Expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
@@ -882,7 +882,7 @@ let _fsyacc_reductions ()  =    [|
                                          LeqBool (_1,_3)
                    )
 # 128 "GCLParser.fsp"
-                 : boolExpr));
+                 : BoolExpr));
 # 886 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
@@ -892,7 +892,7 @@ let _fsyacc_reductions ()  =    [|
                                          TrueBool
                    )
 # 129 "GCLParser.fsp"
-                 : boolExpr));
+                 : BoolExpr));
 # 896 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
@@ -902,10 +902,10 @@ let _fsyacc_reductions ()  =    [|
                                          FalseBool
                    )
 # 130 "GCLParser.fsp"
-                 : boolExpr));
+                 : BoolExpr));
 # 906 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
-            let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : boolExpr)) in
+            let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : BoolExpr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
@@ -913,7 +913,7 @@ let _fsyacc_reductions ()  =    [|
                                          _2
                    )
 # 131 "GCLParser.fsp"
-                 : boolExpr));
+                 : BoolExpr));
 |]
 # 918 "GCLParser.fs"
 let tables () : FSharp.Text.Parsing.Tables<_> = 
@@ -937,5 +937,5 @@ let tables () : FSharp.Text.Parsing.Tables<_> =
     numTerminals = 44;
     productionToNonTerminalTable = _fsyacc_productionToNonTerminalTable  }
 let engine lexer lexbuf startState = (tables ()).Interpret(lexer, lexbuf, startState)
-let start lexer lexbuf : flag*com =
+let start lexer lexbuf : flag*Com =
     Microsoft.FSharp.Core.Operators.unbox ((tables ()).Interpret(lexer, lexbuf, 0))
