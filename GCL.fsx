@@ -170,8 +170,8 @@ let rec compute n =
                               printfn "Syntax is correct"
             | (SAFlag, com) -> signAnalysis com
             | (SECFlag, com) -> gclSecurity com
-            | (det, com) -> makeNDGraph com det
             | (FlemmingFlag, com) -> gclModelChecking com
+            | (det, com) -> makeNDGraph com det
         compute 1
         with err -> printfn "Syntax Wrong"
                     printfn "%s" err.Message
