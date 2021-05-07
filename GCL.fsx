@@ -15,13 +15,15 @@ open PrintAST
 open GCLAnalysis
 #load "GCLSecurity.fsx"
 open GCLSecurity
-#load "ModelChecking.fsx"
-open ModelChecking
-
 let rec pow a b =
     match b with
     |0 -> 1
     |_ -> a * pow a (b-1);;
+
+#load "ModelChecking.fsx"
+open ModelChecking
+
+
 
 let rec eval e (mapInts:Map<String, int>, mapArrays:Map<String, int []>) =
   match e with
