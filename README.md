@@ -30,3 +30,11 @@ The flags are:
          trusted < dubious, public < private
          Enter initial variable security
          x = trusted, y = private
+* -MC -> Model Checking  
+    * Start by giving init values
+    * Example:  
+         -MC if a<0 -> A[0]:=-1 [] a>0 -> A[1] := 1 fi
+         Enter initial values
+         a=0, A=[1;2]
+         Stuck States:
+         qs: A0 = 1, A1 = 2, a = 0, a
