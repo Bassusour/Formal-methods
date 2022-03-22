@@ -1,4 +1,7 @@
-# Formal methods Group 45
+# Formal methods
+This project will take guarded commands as input, and output the corresponding graph. 
+
+# How to run
 Run GCL.fsx with fsharpi to run the program  
 Then enter a flag and a guarded command  
 Example: -ND if a < 4 -> a:=a+1 fi  
